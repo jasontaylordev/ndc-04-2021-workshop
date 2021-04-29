@@ -1,5 +1,7 @@
-﻿using CaWorkshop.WebUI.Data;
-using CaWorkshop.WebUI.Models;
+﻿using CaWorkshop.Application;
+using CaWorkshop.Infrastructure;
+using CaWorkshop.Infrastructure.Identity;
+using CaWorkshop.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,22 +24,15 @@ namespace CaWorkshop.WebUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddInfrastructureServices(Configuration);
+            services.AddApplicationServices();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
             services.AddControllersWithViews();
+
             services.AddRazorPages();
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
