@@ -44,6 +44,7 @@ namespace CaWorkshop.WebUI.Controllers
         // PUT: api/TodoLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutTodoList(int id, TodoList todoList)
         {
             if (id != todoList.Id)
