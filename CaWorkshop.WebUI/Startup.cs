@@ -1,11 +1,8 @@
 ﻿using CaWorkshop.Application;
 using CaWorkshop.Infrastructure;
-using CaWorkshop.Infrastructure.Identity;
-using CaWorkshop.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authentication;
+using CaWorkshop.Infrastructure.Persistence.WebUI.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +26,8 @@ namespace CaWorkshop.WebUI
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+                options.Filters.Add(new ApiExceptionFilterAttribute()));
 
             services.AddRazorPages();
 
