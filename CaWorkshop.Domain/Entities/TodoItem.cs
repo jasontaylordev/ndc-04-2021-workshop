@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CaWorkshop.Domain.Common;
 
 namespace CaWorkshop.Domain.Entities
 {
-    public class TodoItem
+    public class TodoItem : AuditableEntity
     {
         public long Id { get; set; }
 
