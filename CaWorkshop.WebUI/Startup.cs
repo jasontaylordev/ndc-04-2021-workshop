@@ -2,9 +2,12 @@
 using CaWorkshop.Application;
 using CaWorkshop.Application.Common.Interfaces;
 using CaWorkshop.Infrastructure;
+using CaWorkshop.Infrastructure.Persistence;
 using CaWorkshop.Infrastructure.Persistence.WebUI.Filters;
 using CaWorkshop.WebUI.Services;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +41,17 @@ namespace CaWorkshop.WebUI
                 options.Filters.Add(new ApiExceptionFilterAttribute()));
 
             services.AddRazorPages();
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>()
+                .AddSmtpHealthCheck(options =>
+                {
+                    options.Host = "localhost";
+                    options.Port = 25;
+                });
+
+            services.AddHealthChecksUI()
+                .AddInMemoryStorage();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -102,6 +116,11 @@ namespace CaWorkshop.WebUI
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecksUI();
             });
 
             app.UseSpa(spa =>
