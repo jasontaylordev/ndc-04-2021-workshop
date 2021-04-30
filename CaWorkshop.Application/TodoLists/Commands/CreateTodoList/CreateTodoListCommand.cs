@@ -1,8 +1,8 @@
-﻿using CaWorkshop.Application.Common.Interfaces;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CaWorkshop.Application.Common.Interfaces;
 using CaWorkshop.Domain.Entities;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CaWorkshop.Application.TodoLists.Commands.CreateTodoList
 {
